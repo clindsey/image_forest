@@ -1,4 +1,4 @@
-(function(window,undefined){
+(function(window){
   var TILESET_WIDTH = 5,
       TILE_WIDTH = 63,
       TILE_HEIGHT = 32;
@@ -86,9 +86,13 @@
     self.render = function(){
       context.clearRect(0,0,canvas_width,canvas_height);
       var offset_x = hero.map_x - Math.floor(width / 2),
-          offset_y = hero.map_y - Math.floor(height / 2);
-      for(var y = 0, yl = height; y < yl; y += 1){
-        for(var x = 0, xl = width; x < xl; x += 1){
+          offset_y = hero.map_y - Math.floor(height / 2),
+          y,
+          yl,
+          x,
+          xl;
+      for(y = 0, yl = height; y < yl; y += 1){
+        for(x = 0, xl = width; x < xl; x += 1){
           tile_x = (x - y) * (w / 2);
           tile_y = (x + y) * (h / 2);
           tile_x += ((w / 2) * (yl - 1));
@@ -177,8 +181,9 @@
     return self;
   };
   var AnimationFrames = function(tilemap,w,h,index,pixel_height,count){
-    var frames = [];
-    for(var i = 0; i < count; i += 1){
+    var frames = [],
+        i;
+    for(i = 0; i < count; i += 1){
       var c = TmpCanvas(w,h);
       c.context.drawImage(tilemap,(i + 1) * pixel_height,h * index,w,h,0,0,w,h);
       frames[i] = c.canvas;
