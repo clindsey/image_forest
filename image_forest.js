@@ -74,7 +74,7 @@
         tile_x,
         tile_y,
         canvas_width = context.canvas.width,
-        canvas_height = context.canvas.height;
+        canvas_height = context.canvas.height,
         w = TILE_WIDTH,
         h = TILE_HEIGHT;
     var tile_cache = {};
