@@ -1,24 +1,24 @@
-(function(window){
+(function (window) {
   var TILESET_WIDTH = 5,
       TILE_WIDTH = 63,
       TILE_HEIGHT = 32;
   var sprite,
       world_seed = 20110719,
       view_diameter = 30;
-  jQuery(document).ready(function(){
+  jQuery(document).ready(function () {
     var img = new Image();
-    img.onload = function(){
+    img.onload = function () {
       sprite = img;
       MainScene();
     };
     img.src = 'tiles.png';
   });
-  var MainScene = function(){
+  var MainScene = function () {
     var context = document.getElementById('canvas').getContext('2d');
     var hero = Player(0,0),
         map = Map(),
         tile_manager = TileManager(hero,map,context);
-    run_at_fps(function(iteration){
+    run_at_fps(function (iteration) {
       if(iteration % 10 === 0){
         hero.sprite = hero.sprites[hero.direction].walk[hero.sprite_index];
         hero.sprite_index += 1;
@@ -28,7 +28,7 @@
       }
       tile_manager.render();
     },20);
-    jQuery(document).keydown(function(e){
+    jQuery(document).keydown(function (e) {
       if(e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40){
         var vx = 0,
             vy = 0;
@@ -64,7 +64,7 @@
       }
     });
   };
-  var TileManager = function(hero,map,context){
+  var TileManager = function (hero,map,context) {
     var self = {},
         width = view_diameter,
         height = view_diameter,
@@ -83,7 +83,7 @@
     tile_cache.grass = Tile(sprite_tilemap,4,w,h);
     tile_cache.tree_grass = Tile(sprite_tilemap,2,w,h);
     tile_cache.tree = Tile(tree_tilemap,0,tree_tilemap.width,tree_tilemap.height);
-    self.render = function(){
+    self.render = function () {
       context.clearRect(0,0,canvas_width,canvas_height);
       var offset_x = hero.map_x - Math.floor(width / 2),
           offset_y = hero.map_y - Math.floor(height / 2),
@@ -120,25 +120,25 @@
     };
     return self;
   };
-  var Map = function(){
+  var Map = function () {
     var self = {};
-    var seed_from_xy = function(x,y){
+    var seed_from_xy = function (x,y) {
       var random = new Alea(world_seed);
       random = new Alea(random() + x);
       random = new Alea(random() + y);
       return random();
     };
-    self.get_tile = function(x,y){
+    self.get_tile = function (x,y) {
       var random = new Alea(seed_from_xy(x,y));
       return (Math.floor(random() * 10) < 9) % 2;
     };
     return self;
   };
-  var Player = function(map_x,map_y){
+  var Player = function (map_x,map_y) {
     var self = {};
     self.map_x = map_x;
     self.map_y = map_y;
-    self.move_by = function(vx,vy){
+    self.move_by = function (vx,vy) {
       self.map_x += vx;
       self.map_y += vy;
     };
@@ -180,7 +180,7 @@
     self.sprite_index = 0;
     return self;
   };
-  var AnimationFrames = function(tilemap,w,h,index,pixel_height,count){
+  var AnimationFrames = function (tilemap,w,h,index,pixel_height,count) {
     var frames = [],
         i;
     for(i = 0; i < count; i += 1){
@@ -190,19 +190,19 @@
     }
     return frames;
   };
-  var SpriteMap = function(img,x,y,w,h){
+  var SpriteMap = function (img,x,y,w,h) {
     var self = TmpCanvas(w,h);
     self.context.drawImage(img,x,y,w,h,0,0,w,h);
     return self.canvas;
   };
-  var Tile = function(img,index,w,h){
+  var Tile = function (img,index,w,h) {
     var self = TmpCanvas(w,h),
         y = Math.floor(index / TILESET_WIDTH),
         x = (index % TILESET_WIDTH);
     self.context.drawImage(img,(x * w),(y * h),w,h,0,0,w,h);
     return self.canvas;
   };
-  var TmpCanvas = function(w,h){
+  var TmpCanvas = function (w,h) {
     var self = {};
     self.canvas = document.createElement('canvas');
     self.canvas.width = w;
@@ -210,9 +210,9 @@
     self.context = self.canvas.getContext('2d');
     return self;
   };
-  var run_at_fps = function(callback,fps,itr){
+  var run_at_fps = function (callback,fps,itr) {
     itr = itr || 0;
-    setTimeout(function(){
+    setTimeout(function () {
       callback(itr);
       itr += 1;
       run_at_fps(callback,fps,itr);
